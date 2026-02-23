@@ -17,14 +17,14 @@ inputs = ["parse_log"]
 drop_on_error = true
 file = "./vector/vrl/classify_log.vrl"
 
-[transforms.join_or_leave]
+[transforms.join_or_leave_or_death]
 type = "filter"
 inputs = ["classify_log"]
-condition = '.is_join == true || .is_leave == true'
+condition = '.is_join == true || .is_leave == true || .is_death == true'
 
 [transforms.create_payload]
 type = "remap"
-inputs = ["join_or_leave"]
+inputs = ["join_or_leave_or_death"]
 drop_on_error = true
 file = "./vector/vrl/create_payload.vrl"
 
