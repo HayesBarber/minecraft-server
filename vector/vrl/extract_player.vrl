@@ -7,5 +7,5 @@ if .is_join == true {
 }
 
 . = {}
-.message = "{\"content\": \"" + player + " " + joined_str + "\"}"
+.message = {"content": player + " " + joined_str}
 
