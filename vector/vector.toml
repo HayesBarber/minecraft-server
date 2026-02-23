@@ -31,7 +31,7 @@ if joined {
 [transforms.discord_enabled]
 type = "filter"
 inputs = ["extract_player"]
-condition = '${DEBUG:-true}' == "false"
+condition = '${DEBUG:-true} == false'
 
 [sinks.console]
 type = "console"
