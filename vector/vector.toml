@@ -28,6 +28,11 @@ if joined {
 .message = "{\"content\": \"" + player + " " + joined_str + "\"}"
 '''
 
+[transforms.discord_enabled]
+type = "filter"
+inputs = ["extract_player"]
+condition = '${DEBUG:-true}' == "false"
+
 [sinks.console]
 type = "console"
 inputs = ["extract_player"]
@@ -35,8 +40,8 @@ encoding.codec = "text"
 
 [sinks.discord]
 type = "http"
-inputs = ["extract_player"]
-uri = "${DISCORD_WEBHOOK_URI:?discord webhook uri must be supplied}"
+inputs = ["discord_enabled"]
+uri = "${DISCORD_WEBHOOK_URI:-http://localhost/disabled}"
 method = "post"
 encoding.codec = "text"
 request.headers = { Content-Type = "application/json" }
