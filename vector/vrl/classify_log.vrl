@@ -19,11 +19,30 @@
             contains!(.log_data, " suffocated in a wall") ||
             contains!(.log_data, " starved to death") ||
             contains!(.log_data, " withered away") ||
-            contains!(.log_data, " was killed by magic") ||
             contains!(.log_data, " drowned") ||
             contains!(.log_data, " burned to death") ||
             contains!(.log_data, " froze to death") ||
             contains!(.log_data, " was obliterated by") ||
-            contains!(.log_data, " was smashed by") ||
+            contains!(.log_data, " was smashed by ") ||
             contains!(.log_data, " died because of") ||
-            contains!(.log_data, " left the confines of this world")
+            contains!(.log_data, " left the confines of this world") ||
+            contains!(.log_data, " blew up") ||
+            contains!(.log_data, " was killed by ") ||
+            contains!(.log_data, " fell from a high place") ||
+            contains!(.log_data, " fell off a ladder") ||
+            contains!(.log_data, " fell off some vines") ||
+            contains!(.log_data, " fell off some weeping vines") ||
+            contains!(.log_data, " fell off some twisting vines") ||
+            contains!(.log_data, " fell while climbing") ||
+            contains!(.log_data, " fell off scaffolding") ||
+            contains!(.log_data, " was impaled on a stalagmite") ||
+            contains!(.log_data, " was skewered by a falling stalactite") ||
+            contains!(.log_data, " was squashed by a falling anvil") ||
+            contains!(.log_data, " went off with a bang") ||
+            contains!(.log_data, " was struck by lightning") ||
+            contains!(.log_data, " was squished too much") ||
+            contains!(.log_data, " was poked to death by a sweet berry bush") ||
+            contains!(.log_data, " whilst trying to escape ") ||
+            contains!(.log_data, " whilst fighting ") ||
+            contains!(.log_data, " didn't want to live in the same world as ")
+
