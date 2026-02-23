@@ -1,0 +1,43 @@
+data_dir = ""
+
+[sources.minecraft]
+type = "file"
+include = [""]
+read_from = "end"
+
+[transforms.join_or_leave]
+type = "filter"
+inputs = ["minecraft"]
+condition = 'contains(string!(.message), "joined the game") || contains(string!(.message), "left the game")'
+
+[transforms.extract_player]
+type = "remap"
+inputs = ["join_or_leave"]
+drop_on_error = true
+source = '''
+parts = split(string!(.message), "]: ")
+msg = parts[-1]
+words = split!(msg, " ")
+. = {}
+player = words[0]
+joined = contains!(msg, "joined the game")
+joined_str = "left the game"
+if joined {
+  joined_str = "joined the game"
+}
+.message = "{\"content\": \"" + player + " " + joined_str + "\"}"
+'''
+
+[sinks.console]
+type = "console"
+inputs = ["extract_player"]
+encoding.codec = "text"
+
+[sinks.discord]
+type = "http"
+inputs = ["extract_player"]
+uri = ""
+method = "post"
+encoding.codec = "text"
+request.headers = { Content-Type = "application/json" }
+
