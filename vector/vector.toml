@@ -1,8 +1,8 @@
-data_dir = ""
+data_dir = "${VECTOR_DATA_DIR:?data directory must be supplied}"
 
 [sources.minecraft]
 type = "file"
-include = [""]
+include = ["${MINECRAFT_LOG_PATH:?minecraft log file must be supplied}"]
 read_from = "end"
 
 [transforms.join_or_leave]
@@ -36,7 +36,7 @@ encoding.codec = "text"
 [sinks.discord]
 type = "http"
 inputs = ["extract_player"]
-uri = ""
+uri = "${DISCORD_WEBHOOK_URI:?discord webhook uri must be supplied}"
 method = "post"
 encoding.codec = "text"
 request.headers = { Content-Type = "application/json" }
