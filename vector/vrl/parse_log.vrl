@@ -1,0 +1,4 @@
+parts = split(string!(.message), "]: ")
+msg = parts[-1]
+.log_data = msg
+

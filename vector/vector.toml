@@ -5,6 +5,12 @@ type = "file"
 include = ["${MINECRAFT_LOG_PATH:?minecraft log file must be supplied}"]
 read_from = "${READ_FROM:-end}"
 
+[transforms.parse_log]
+type = "remap"
+inputs = ["minecraft"]
+drop_on_error = true
+file = "./vector/vrl/parse_log.vrl"
+
 [transforms.join_or_leave]
 type = "filter"
 inputs = ["minecraft"]
