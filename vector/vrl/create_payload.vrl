@@ -1,0 +1,4 @@
+log_data = .log_data
+. = {}
+.message = {"content": log_data}
+

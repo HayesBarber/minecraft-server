@@ -22,20 +22,20 @@ type = "filter"
 inputs = ["classify_log"]
 condition = '.is_join == true || .is_leave == true'
 
-[transforms.extract_player]
+[transforms.create_payload]
 type = "remap"
 inputs = ["join_or_leave"]
 drop_on_error = true
-file = "./vector/vrl/extract_player.vrl"
+file = "./vector/vrl/create_payload.vrl"
 
 [transforms.discord_enabled]
 type = "filter"
-inputs = ["extract_player"]
+inputs = ["create_payload"]
 condition = '${DEBUG:-true} == false'
 
 [sinks.console]
 type = "console"
-inputs = ["extract_player"]
+inputs = ["create_payload"]
 encoding.codec = "text"
 
 [sinks.discord]
