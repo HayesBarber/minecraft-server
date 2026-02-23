@@ -26,19 +26,7 @@ condition = '.is_join == true || .is_leave == true'
 type = "remap"
 inputs = ["join_or_leave"]
 drop_on_error = true
-source = '''
-parts = split(string!(.message), "]: ")
-msg = parts[-1]
-words = split!(msg, " ")
-. = {}
-player = words[0]
-joined = contains!(msg, "joined the game")
-joined_str = "left the game"
-if joined {
-  joined_str = "joined the game"
-}
-.message = "{\"content\": \"" + player + " " + joined_str + "\"}"
-'''
+file = "./vector/vrl/extract_player.vrl"
 
 [transforms.discord_enabled]
 type = "filter"
