@@ -3,7 +3,7 @@ data_dir = "${VECTOR_DATA_DIR:?data directory must be supplied}"
 [sources.minecraft]
 type = "file"
 include = ["${MINECRAFT_LOG_PATH:?minecraft log file must be supplied}"]
-read_from = "end"
+read_from = "${READ_FROM:-end}"
 
 [transforms.join_or_leave]
 type = "filter"
