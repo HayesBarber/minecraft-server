@@ -1,3 +1,29 @@
 .is_join = contains!(.log_data, "joined the game")
 .is_leave = contains!(.log_data, "left the game")
 
+.is_death = contains!(.log_data, " was slain by ") || 
+            contains!(.log_data, " fell out of the world") ||
+            contains!(.log_data, " was shot by ") ||
+            contains!(.log_data, " was blown up by ") ||
+            contains!(.log_data, " was impaled by ") ||
+            contains!(.log_data, " was pummeled by ") ||
+            contains!(.log_data, " was fireballed by ") ||
+            contains!(.log_data, " was speared by ") ||
+            contains!(.log_data, " was stung to death") ||
+            contains!(.log_data, " discovered the floor was lava") ||
+            contains!(.log_data, " experienced kinetic energy") ||
+            contains!(.log_data, " hit the ground too hard") ||
+            contains!(.log_data, " went up in flames") ||
+            contains!(.log_data, " tried to swim in lava") ||
+            contains!(.log_data, " was pricked to death") ||
+            contains!(.log_data, " suffocated in a wall") ||
+            contains!(.log_data, " starved to death") ||
+            contains!(.log_data, " withered away") ||
+            contains!(.log_data, " was killed by magic") ||
+            contains!(.log_data, " drowned") ||
+            contains!(.log_data, " burned to death") ||
+            contains!(.log_data, " froze to death") ||
+            contains!(.log_data, " was obliterated by") ||
+            contains!(.log_data, " was smashed by") ||
+            contains!(.log_data, " died because of") ||
+            contains!(.log_data, " left the confines of this world")
