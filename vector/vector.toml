@@ -11,10 +11,16 @@ inputs = ["minecraft"]
 drop_on_error = true
 file = "./vector/vrl/parse_log.vrl"
 
+[transforms.classify_log]
+type = "remap"
+inputs = ["parse_log"]
+drop_on_error = true
+file = "./vector/vrl/classify_log.vrl"
+
 [transforms.join_or_leave]
 type = "filter"
-inputs = ["minecraft"]
-condition = 'contains(string!(.message), "joined the game") || contains(string!(.message), "left the game")'
+inputs = ["classify_log"]
+condition = '.is_join == true || .is_leave == true'
 
 [transforms.extract_player]
 type = "remap"
