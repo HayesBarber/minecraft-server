@@ -17,21 +17,21 @@ Vector behavior is controlled by environment variables
 
 __Required__
 
-- VECTOR_DATA_DIR
-    - Directory where Vector stores checkpoints/state.
-- MINECRAFT_LOG_PATH
-    - Path to logs/latest.log.
+- `VECTOR_DATA_DIR`
+  - Directory where Vector stores checkpoints/state.
+- `MINECRAFT_LOG_PATH`
+  - Path to `logs/latest.log`.
 
 __Optional__
 
-- READ_FROM (default: end)
-    - end → production mode, no replay
-    - beginning → replay entire log (debug/testing)
-- DEBUG (default: true)
-    - true → disables Discord sink
-    - false → enables Discord notifications
-- DISCORD_WEBHOOK_URI
-    - Required only when DEBUG=false.
+- `READ_FROM` (default: `end`)
+  - `end` → production mode, no replay
+  - `beginning` → replay entire log (debug/testing)
+- `DEBUG` (default: `true`)
+  - `true` → disables Discord sink
+  - `false` → enables Discord notifications
+- `DISCORD_WEBHOOK_URI`
+  - Required only when `DEBUG=false`.
 
 Example
 
