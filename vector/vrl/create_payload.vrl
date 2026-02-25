@@ -6,7 +6,7 @@ if starts_with!(player, ".") {
   player = slice!(player, 1)
 }
 
-avatar_url = "https://mc-heads.net/avatar/" + string!(player) + "/100"
+avatar_url = "https://mc-heads.net/avatar/" + string!(player) + "/50"
 
 color = 9807270
 
