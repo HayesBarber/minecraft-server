@@ -6,6 +6,28 @@ if starts_with!(player, ".") {
   player = slice!(player, 1)
 }
 
+avatar_url = "https://mc-heads.net/avatar/" + string!(player) + "/100"
+
+color = 9807270
+
+if .is_join == true {
+  color = 5763719
+} else if .is_leave == true {
+  color = 9807270
+} else if .is_death == true {
+  color = 15158332
+}
+
 . = {}
-.message = {"content": log_data}
+.message = {
+  "embeds": [
+    {
+      "title": log_data,
+      "color": color,
+      "thumbnail": {
+        "url": avatar_url
+      }
+    }
+  ]
+}
 
