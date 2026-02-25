@@ -1,4 +1,11 @@
 log_data = .log_data
+
+parts = split(string!(log_data), " ")
+player = parts[0]
+if starts_with!(player, ".") {
+  player = slice!(player, 1)
+}
+
 . = {}
 .message = {"content": log_data}
 
