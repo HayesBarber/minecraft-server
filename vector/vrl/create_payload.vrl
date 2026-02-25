@@ -9,23 +9,28 @@ if starts_with!(player, ".") {
 avatar_url = "https://mc-heads.net/avatar/" + string!(player) + "/50"
 
 color = 9807270
+title = "Player Left"
 
 if .is_join == true {
   color = 5763719
-} else if .is_leave == true {
-  color = 9807270
+  title = "Player Joined"
 } else if .is_death == true {
   color = 15158332
+  title = "Player Death"
 }
 
 . = {}
 .message = {
   "embeds": [
     {
-      "title": log_data,
+      "title": title,
+      "description": log_data,
       "color": color,
       "thumbnail": {
         "url": avatar_url
+      },
+      "footer": {
+        "text": "Memes Minecraft Server"
       }
     }
   ]
