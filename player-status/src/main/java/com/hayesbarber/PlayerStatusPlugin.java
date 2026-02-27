@@ -4,7 +4,7 @@ package com.hayesbarber;
  * Hello world!
  *
  */
-public class App 
+public class PlayerStatusPlugin 
 {
     public static void main( String[] args )
     {
