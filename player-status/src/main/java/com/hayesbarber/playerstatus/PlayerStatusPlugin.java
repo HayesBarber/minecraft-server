@@ -1,13 +1,12 @@
 package com.hayesbarber.playerstatus;
 
-/**
- * Hello world!
- *
- */
-public class PlayerStatusPlugin 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class PlayerStatusPlugin extends JavaPlugin {
+
+    @Override
+    public void onEnable() {
+        
     }
 }
+
