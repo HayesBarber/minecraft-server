@@ -18,6 +18,9 @@ public class WebhookService {
     private final String webhookUrl;
 
     public CompletableFuture<Integer> sendMessage(WebhookPayload payload) {
+        if (webhookUrl.isEmpty()) {
+            return CompletableFuture.completedFuture(-1);
+        }
         final String json = gson.toJson(payload);
         final HttpRequest request = HttpRequest.newBuilder()
                 .header("Content-Type", "application/json")
