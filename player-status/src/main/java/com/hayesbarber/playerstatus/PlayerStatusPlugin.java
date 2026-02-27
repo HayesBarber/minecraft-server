@@ -12,14 +12,15 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
     private WebhookService webhookService;
 
     @Override
-    public void onEnable() {
-        webhookService = new WebhookService("");
-        getLogger().info("PlayerStatusPlugin enabled");
+    public void onLoad() {
+        saveDefaultConfig();
+        getLogger().info("PlayerStatusPlugin loaded");
     }
 
     @Override
-    public void onLoad() {
-        getLogger().info("PlayerStatusPlugin loaded");
+    public void onEnable() {
+        webhookService = new WebhookService("");
+        getLogger().info("PlayerStatusPlugin enabled");
     }
 
     @Override
