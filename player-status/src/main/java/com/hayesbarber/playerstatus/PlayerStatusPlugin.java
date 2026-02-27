@@ -19,7 +19,11 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        webhookService = new WebhookService("");
+        final String url = getConfig().getString("Webhook-Url", "");
+        if (url.isEmpty()) {
+            getLogger().warning("Webhook Url is empty");
+        }
+        webhookService = new WebhookService(url);
         getLogger().info("PlayerStatusPlugin enabled");
     }
 
