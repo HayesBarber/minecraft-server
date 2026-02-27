@@ -4,8 +4,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class PlayerStatusPlugin extends JavaPlugin {
 
+    private WebhookService webhookService;
+
     @Override
     public void onEnable() {
+        webhookService = new WebhookService("");
         getLogger().info("PlayerStatusPlugin enabled");
     }
 
