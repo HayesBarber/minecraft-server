@@ -1,4 +1,4 @@
-package com.hayesbarber;
+package com.hayesbarber.playerstatus;
 
 /**
  * Hello world!
