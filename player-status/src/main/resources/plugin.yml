@@ -1,5 +1,5 @@
 name: PlayerStatus
 version: 1.0
-main: com.hayes.playerstatus.PlayerStatusPlugin
+main: com.hayesbarber.playerstatus.PlayerStatusPlugin
 api-version: '1.21.11'
 author: HayesBarber
