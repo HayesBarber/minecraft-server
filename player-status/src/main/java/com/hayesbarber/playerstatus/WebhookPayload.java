@@ -6,20 +6,24 @@ import java.util.List;
 
 @Builder
 public class WebhookPayload {
-    private String content;
-    private String username;
     private List<Embed> embeds;
 
     @Builder
     static class Embed {
         private String title;
         private String description;
-        private List<Field> fields;
+        private Integer color;
+        private Thumbnail thumbnail;
+        private Footer footer;
     }
 
     @Builder
-    static class Field {
-        private String name;
-        private String value;
+    static class Thumbnail {
+        private String url;
+    }
+
+    @Builder
+    static class Footer {
+        private String text;
     }
 }
