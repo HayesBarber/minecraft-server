@@ -53,11 +53,11 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
         joinTimes.put(player.getUniqueId(), Instant.now());
 
         String avatarUrl = getAvatarUrl(player.getUniqueId());
-        String timestamp = formatTimestamp(Instant.now());
+        String footer = "Current Level: " + player.getLevel();
 
         WebhookPayload payload = buildEmbed("Player Joined", player.getName() + " joined the game", COLOR_JOIN,
                 avatarUrl,
-                timestamp);
+                footer);
 
         webhookService.sendMessage(payload)
                 .thenAccept(statusCode -> getLogger().info("Join webhook response: " + statusCode));
