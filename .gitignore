@@ -3,3 +3,11 @@
 
 vector/vector-data
 
+.classpath
+.project
+.factorypath
+.settings/
+
+target/
+build/
+
