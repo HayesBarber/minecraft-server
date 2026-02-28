@@ -91,9 +91,10 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
         }
 
         String avatarUrl = getAvatarUrl(player.getUniqueId());
-        String timestamp = formatTimestamp(Instant.now());
+        String footer = String.format("Player was level: %d • XP: %.2f",
+                player.getLevel(), player.getExp());
 
-        WebhookPayload payload = buildEmbed("Player Death", deathMessage, COLOR_DEATH, avatarUrl, timestamp);
+        WebhookPayload payload = buildEmbed("Player Death", deathMessage, COLOR_DEATH, avatarUrl, footer);
 
         webhookService.sendMessage(payload)
                 .thenAccept(statusCode -> getLogger().info("Death webhook response: " + statusCode));
@@ -119,12 +120,6 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
 
     private String getUuidNoDashes(UUID uuid) {
         return uuid.toString().replace("-", "");
-    }
-
-    private String formatTimestamp(Instant instant) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a")
-                .withZone(ZoneId.of("America/New_York"));
-        return instant.atZone(ZoneId.of("America/New_York")).format(formatter);
     }
 
     private String formatDuration(Instant joinTime) {
