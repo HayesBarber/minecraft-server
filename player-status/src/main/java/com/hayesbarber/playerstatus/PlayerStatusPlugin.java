@@ -1,5 +1,6 @@
 package com.hayesbarber.playerstatus;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -48,80 +49,74 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        final UUID uuid = event.getPlayer().getUniqueId();
-        final String playerName = event.getPlayer().getName();
-        final String uuidNoDashes = uuid.toString().replace("-", "");
+        Player player = event.getPlayer();
+        joinTimes.put(player.getUniqueId(), Instant.now());
 
-        joinTimes.put(uuid, Instant.now());
-
-        String avatarUrl = "https://mc-heads.net/avatar/" + uuidNoDashes + "/50";
+        String avatarUrl = getAvatarUrl(player.getUniqueId());
         String timestamp = formatTimestamp(Instant.now());
 
-        WebhookPayload payload = WebhookPayload.builder()
-                .embeds(List.of(
-                        WebhookPayload.Embed.builder()
-                                .title("Player Joined")
-                                .description(playerName + " joined")
-                                .color(COLOR_JOIN)
-                                .thumbnail(WebhookPayload.Thumbnail.builder().url(avatarUrl).build())
-                                .footer(WebhookPayload.Footer.builder().text(timestamp).build())
-                                .build()))
-                .build();
+        WebhookPayload payload = buildEmbed("Player Joined", player.getName() + " joined", COLOR_JOIN, avatarUrl,
+                timestamp);
 
-        webhookService.sendMessage(payload);
+        webhookService.sendMessage(payload)
+                .thenAccept(statusCode -> getLogger().info("Join webhook response: " + statusCode));
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        final UUID uuid = event.getPlayer().getUniqueId();
-        final String playerName = event.getPlayer().getName();
-        final String uuidNoDashes = uuid.toString().replace("-", "");
+        Player player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
 
         Instant joinTime = joinTimes.remove(uuid);
         String sessionDuration = formatDuration(joinTime);
 
-        String avatarUrl = "https://mc-heads.net/avatar/" + uuidNoDashes + "/50";
+        String avatarUrl = getAvatarUrl(uuid);
 
-        WebhookPayload payload = WebhookPayload.builder()
-                .embeds(List.of(
-                        WebhookPayload.Embed.builder()
-                                .title("Player Left")
-                                .description(playerName + " left")
-                                .color(COLOR_LEFT)
-                                .thumbnail(WebhookPayload.Thumbnail.builder().url(avatarUrl).build())
-                                .footer(WebhookPayload.Footer.builder().text("Session Duration: " + sessionDuration)
-                                        .build())
-                                .build()))
-                .build();
+        WebhookPayload payload = buildEmbed("Player Left", player.getName() + " left", COLOR_LEFT, avatarUrl,
+                "Session Duration: " + sessionDuration);
 
-        webhookService.sendMessage(payload);
+        webhookService.sendMessage(payload)
+                .thenAccept(statusCode -> getLogger().info("Quit webhook response: " + statusCode));
     }
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
-        final UUID uuid = event.getPlayer().getUniqueId();
-        final String uuidNoDashes = uuid.toString().replace("-", "");
+        Player player = event.getPlayer();
 
         String deathMessage = event.getDeathMessage();
         if (deathMessage == null || deathMessage.isEmpty()) {
-            deathMessage = event.getPlayer().getName() + " died";
+            deathMessage = player.getName() + " died";
         }
 
-        String avatarUrl = "https://mc-heads.net/avatar/" + uuidNoDashes + "/50";
+        String avatarUrl = getAvatarUrl(player.getUniqueId());
         String timestamp = formatTimestamp(Instant.now());
 
-        WebhookPayload payload = WebhookPayload.builder()
+        WebhookPayload payload = buildEmbed("Player Death", deathMessage, COLOR_DEATH, avatarUrl, timestamp);
+
+        webhookService.sendMessage(payload)
+                .thenAccept(statusCode -> getLogger().info("Death webhook response: " + statusCode));
+    }
+
+    private WebhookPayload buildEmbed(String title, String description, int color, String avatarUrl,
+            String footerText) {
+        return WebhookPayload.builder()
                 .embeds(List.of(
                         WebhookPayload.Embed.builder()
-                                .title("Player Death")
-                                .description(deathMessage)
-                                .color(COLOR_DEATH)
+                                .title(title)
+                                .description(description)
+                                .color(color)
                                 .thumbnail(WebhookPayload.Thumbnail.builder().url(avatarUrl).build())
-                                .footer(WebhookPayload.Footer.builder().text(timestamp).build())
+                                .footer(WebhookPayload.Footer.builder().text(footerText).build())
                                 .build()))
                 .build();
+    }
 
-        webhookService.sendMessage(payload);
+    private String getAvatarUrl(UUID uuid) {
+        return "https://mc-heads.net/avatar/" + getUuidNoDashes(uuid) + "/50";
+    }
+
+    private String getUuidNoDashes(UUID uuid) {
+        return uuid.toString().replace("-", "");
     }
 
     private String formatTimestamp(Instant instant) {
@@ -147,14 +142,11 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
         if (hours > 0) {
             sb.append(hours).append("h ");
         }
-        if (minutes > 0 || (hours == 0 && seconds == 0)) {
-            sb.append(minutes).append("m");
+        if (minutes > 0) {
+            sb.append(minutes).append("m ");
         }
         if (seconds > 0) {
-            if (sb.length() > 0 && sb.charAt(sb.length() - 1) == ' ') {
-                sb.append(minutes > 0 ? " " : "");
-            }
-            sb.append(seconds).append("s");
+            sb.append(seconds).append("s ");
         }
 
         return sb.toString().trim();
