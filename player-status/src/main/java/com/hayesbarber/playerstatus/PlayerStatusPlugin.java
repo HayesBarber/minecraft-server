@@ -55,7 +55,8 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
         String avatarUrl = getAvatarUrl(player.getUniqueId());
         String timestamp = formatTimestamp(Instant.now());
 
-        WebhookPayload payload = buildEmbed("Player Joined", player.getName() + " joined", COLOR_JOIN, avatarUrl,
+        WebhookPayload payload = buildEmbed("Player Joined", player.getName() + " joined the game", COLOR_JOIN,
+                avatarUrl,
                 timestamp);
 
         webhookService.sendMessage(payload)
@@ -72,7 +73,7 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
 
         String avatarUrl = getAvatarUrl(uuid);
 
-        WebhookPayload payload = buildEmbed("Player Left", player.getName() + " left", COLOR_LEFT, avatarUrl,
+        WebhookPayload payload = buildEmbed("Player Left", player.getName() + " left the game", COLOR_LEFT, avatarUrl,
                 "Session Duration: " + sessionDuration);
 
         webhookService.sendMessage(payload)
