@@ -91,8 +91,7 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
         }
 
         String avatarUrl = getAvatarUrl(player.getUniqueId());
-        String footer = String.format("Player was level: %d • XP: %.2f",
-                player.getLevel(), player.getExp());
+        String footer = String.format("Player was level: %d", player.getLevel());
 
         WebhookPayload payload = buildEmbed("Player Death", deathMessage, COLOR_DEATH, avatarUrl, footer);
 
