@@ -1,8 +1,10 @@
 package com.hayesbarber.playerstatus;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -19,9 +21,14 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
     private static final int COLOR_JOIN = 5763719;
     private static final int COLOR_LEFT = 9807270;
     private static final int COLOR_DEATH = 15158332;
+    private static final int COLOR_DIAMOND = 4886754;
+    private static final int DIAMOND_DELAY_TICKS = 200;
+    private static final int DIAMOND_CAP = 10;
 
     private WebhookService webhookService;
     private final Map<UUID, Instant> joinTimes = new ConcurrentHashMap<>();
+    private final Map<UUID, Integer> diamondCounts = new ConcurrentHashMap<>();
+    private final Map<UUID, Integer> scheduledTaskIds = new ConcurrentHashMap<>();
 
     @Override
     public void onLoad() {
@@ -143,5 +150,52 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
         }
 
         return sb.toString().trim();
+    }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        if (event.getBlock().getType() != Material.DIAMOND_ORE) {
+            return;
+        }
+
+        Player player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
+
+        int currentCount = diamondCounts.merge(uuid, 1, Integer::sum);
+        if (currentCount > DIAMOND_CAP) {
+            diamondCounts.put(uuid, DIAMOND_CAP);
+        }
+
+        Integer existingTaskId = scheduledTaskIds.get(uuid);
+        if (existingTaskId != null) {
+            getServer().getScheduler().cancelTask(existingTaskId);
+        }
+
+        int taskId = getServer().getScheduler().runTaskLater(this, () -> {
+            Integer count = diamondCounts.remove(uuid);
+            scheduledTaskIds.remove(uuid);
+
+            if (count == null || count == 0) {
+                return;
+            }
+
+            String description;
+            if (count >= DIAMOND_CAP) {
+                description = player.getName() + " mined 10+ diamonds";
+            } else {
+                description = player.getName() + " mined " + count + " diamonds";
+            }
+
+            String avatarUrl = getAvatarUrl(uuid);
+            String footer = String.format("Level %d • XP: %.2f", player.getLevel(), player.getExp());
+
+            WebhookPayload payload = buildEmbed("Diamonds Found", description,
+                    COLOR_DIAMOND, avatarUrl, footer);
+
+            webhookService.sendMessage(payload)
+                    .thenAccept(statusCode -> getLogger().info("Diamond webhook response: " + statusCode));
+        }, DIAMOND_DELAY_TICKS).getTaskId();
+
+        scheduledTaskIds.put(uuid, taskId);
     }
 }
