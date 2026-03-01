@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -55,7 +56,7 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
         getLogger().info("PlayerStatusPlugin disabled");
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         joinTimes.put(player.getUniqueId(), Instant.now());
@@ -71,7 +72,7 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
                 .thenAccept(statusCode -> getLogger().info("Join webhook response: " + statusCode));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
@@ -88,7 +89,7 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
                 .thenAccept(statusCode -> getLogger().info("Quit webhook response: " + statusCode));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getPlayer();
 
@@ -155,7 +156,7 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
         return sb.toString().trim();
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockBreak(BlockBreakEvent event) {
         if (event.getBlock().getType() != Material.DIAMOND_ORE) {
             return;
@@ -202,7 +203,7 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
         scheduledTaskIds.put(uuid, taskId);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onEndermanKill(EntityDeathEvent event) {
         if (!(event.getEntity() instanceof Enderman)) {
             return;
