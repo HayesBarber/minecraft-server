@@ -51,8 +51,7 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
         joinTimes.put(player.getUniqueId(), Instant.now());
 
         String avatarUrl = getAvatarUrl(player.getUniqueId());
-        String footer = String.format("Level %d • XP: %.2f • Ping: %dms",
-                player.getLevel(), player.getExp(), player.getPing());
+        String footer = String.format("Level %d • XP: %.2f", player.getLevel(), player.getExp());
 
         WebhookPayload payload = buildEmbed("Player Joined", player.getName() + " joined the game", COLOR_JOIN,
                 avatarUrl,
@@ -89,7 +88,7 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
         }
 
         String avatarUrl = getAvatarUrl(player.getUniqueId());
-        String footer = String.format("Player was level: %d", player.getLevel());
+        String footer = String.format("Player was level %d", player.getLevel());
 
         WebhookPayload payload = buildEmbed("Player Death", deathMessage, COLOR_DEATH, avatarUrl, footer);
 
