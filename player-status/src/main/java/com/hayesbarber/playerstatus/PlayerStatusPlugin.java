@@ -1,8 +1,10 @@
 package com.hayesbarber.playerstatus;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -19,6 +21,7 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
     private static final int COLOR_JOIN = 5763719;
     private static final int COLOR_LEFT = 9807270;
     private static final int COLOR_DEATH = 15158332;
+    private static final int COLOR_DIAMOND = 4886754;
 
     private WebhookService webhookService;
     private final Map<UUID, Instant> joinTimes = new ConcurrentHashMap<>();
@@ -143,5 +146,22 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
         }
 
         return sb.toString().trim();
+    }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        if (event.getBlock().getType() != Material.DIAMOND_ORE) {
+            return;
+        }
+
+        Player player = event.getPlayer();
+        String avatarUrl = getAvatarUrl(player.getUniqueId());
+        String footer = String.format("Level %d • XP: %.2f", player.getLevel(), player.getExp());
+
+        WebhookPayload payload = buildEmbed("Diamonds Found", player.getName() + " mined diamonds",
+                COLOR_DIAMOND, avatarUrl, footer);
+
+        webhookService.sendMessage(payload)
+                .thenAccept(statusCode -> getLogger().info("Diamond webhook response: " + statusCode));
     }
 }
