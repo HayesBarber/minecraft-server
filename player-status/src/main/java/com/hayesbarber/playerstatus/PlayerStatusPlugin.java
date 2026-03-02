@@ -158,7 +158,9 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onBlockBreak(BlockBreakEvent event) {
-        if (event.getBlock().getType() != Material.DIAMOND_ORE) {
+        Material type = event.getBlock().getType();
+        if (type != Material.DIAMOND_ORE &&
+                type != Material.DEEPSLATE_DIAMOND_ORE) {
             return;
         }
 
