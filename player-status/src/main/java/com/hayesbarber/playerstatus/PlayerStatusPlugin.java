@@ -1,6 +1,7 @@
 package com.hayesbarber.playerstatus;
 
 import org.bukkit.Material;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Enderman;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,6 +27,7 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
     private static final int COLOR_DEATH = 15158332;
     private static final int COLOR_DIAMOND = 4886754;
     private static final int COLOR_ENDERMAN = 5527302;
+    private static final int COLOR_DRAGON = 12587552;
     private static final int DIAMOND_DELAY_TICKS = 200;
     private static final int DIAMOND_CAP = 10;
 
@@ -224,5 +226,26 @@ public class PlayerStatusPlugin extends JavaPlugin implements Listener {
 
         webhookService.sendMessage(payload)
                 .thenAccept(statusCode -> getLogger().info("Enderman webhook response: " + statusCode));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onDragonKill(EntityDeathEvent event) {
+        if (!(event.getEntity() instanceof EnderDragon)) {
+            return;
+        }
+
+        Player player = event.getEntity().getKiller();
+        if (player == null) {
+            return;
+        }
+
+        String avatarUrl = getAvatarUrl(player.getUniqueId());
+        String footer = String.format("Level %d • XP: %.2f", player.getLevel(), player.getExp());
+
+        WebhookPayload payload = buildEmbed("Ender Dragon Killed", player.getName() + " defeated the Ender Dragon!",
+                COLOR_DRAGON, avatarUrl, footer);
+
+        webhookService.sendMessage(payload)
+                .thenAccept(statusCode -> getLogger().info("Dragon webhook response: " + statusCode));
     }
 }
