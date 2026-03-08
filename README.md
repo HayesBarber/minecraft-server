@@ -1,8 +1,42 @@
-# Minecraft Server Architecture
+# Minecraft Server
 
-Minecraft server setup for a homelab environment. Includes network segmentation, service configuration, and a log processing pipeline.
+## Java Plugin (player-status)
 
-## Log Processing
+A Paper server plugin that sends Discord webhooks for player events.
+
+### Events Tracked
+- Player join/quit
+- Player deaths
+- Diamond mining (batches within 10 seconds)
+- Enderman kills
+- Ender Dragon kills
+
+### Build
+
+```bash
+cd player-status
+mvn clean package
+```
+
+The JAR will be in `player-status/target/`
+
+### Configuration
+
+Edit `config.yml` once the plugin has been installed on the server:
+
+```yaml
+Webhook-Url: "https://discord.com/api/webhooks/..."
+```
+
+### Installation
+
+Copy the built JAR to your server's `plugins/` folder and restart.
+
+---
+
+## Log Processing (Deprecated)
+
+> **This section is deprecated.** The Vector-based log processing pipeline is no longer in use. Discord webhooks are now handled by the Java plugin above.
 
 The log pipeline utilizes `vector` and exists to:
 
